@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
+import load from './load.png';
 import './App.css';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
+import ReactLoading from 'react-loading';
 
 class App extends Component {
 
@@ -10,8 +11,7 @@ class App extends Component {
 		super(props);
 
 		this.maxNodes = 11;
-
-		this.state = {twitchName: '', botID: null, mpm: '', stream: false, chartData: null};
+		this.state = {twitchName: '', botID: null, mpm: '', stream: true, chartData: null, working: false};
 
 		this.handleChange = this.handleChange.bind(this);
 		this.handleSubmit = this.handleSubmit.bind(this);
@@ -19,22 +19,52 @@ class App extends Component {
 	}
 
 	componentDidMount() {
-		this.interval = setInterval(() => this.getData(), 4000);
+		this.interval = setInterval(() => this.getData(), 2000);
 	}
 
 	componentWillUnmount() {
   		clearInterval(this.interval);
 	}
 
+	/*
 
+	Inputs functions
+
+	*/
+	handleChange(event) {
+    	this.setState({twitchName: event.target.value});
+  	}
+
+  	handleSubmit(event) {
+		this.setState({working: true});
+		let url = '/bot/' + this.state.twitchName;
+		axios.get(url).then(res => {
+			this.setState({botID: res.data});
+		});
+    	event.preventDefault();
+	}
+
+	handleInputChange(event) {
+		this.setState({stream: event.target.checked});
+	}
+
+	/*
+
+	Graph functions
+
+	*/
 	getData() {
 		if(this.state.botID != null) {
-			let url = '/bot/status/0';
-			console.log(url);
+			let url = '/bot/status/' + this.state.botID;
 			axios.get(url).then(res => {
-				console.log(res.data.test);
-				this.updateGraph(res.data.test)
-			});
+				this.setState({working: false});
+				console.log(res.data.mpm);
+				this.updateGraph(res.data.mpm)
+			}).catch(error => {
+				console.log(error);
+				clearInterval(this.interval);
+				this.setState({botID: null, mpm: '', chartData: null});
+ 			});
 		}
 
 	}
@@ -80,7 +110,7 @@ class App extends Component {
 	formLabels(dataset) {
 		let ret = []
 		for(var i = 1; i < dataset.length; i++) {
-			ret.push(i + '');
+			ret.push('');
 		}
 		return ret
 	}
@@ -95,24 +125,6 @@ class App extends Component {
 		return ret;
 	}
 
-	handleChange(event) {
-    	this.setState({twitchName: event.target.value});
-  	}
-
-  	handleSubmit(event) {
-		let url = '/bot/' + this.state.twitchName;
-		axios.get(url).then(res => {
-			this.setState({botID: res.data});
-		});
-    	event.preventDefault();
-	}
-
-	handleInputChange(event) {
-		console.log(event);
-		this.setState({stream: event.target.checked});
-		console.log(event.target.checked);
-	}
-
 	render() {
 
 		return (
@@ -120,34 +132,48 @@ class App extends Component {
 				<header className="App-header">
 					<h1 className="App-title">TwitchInfo</h1>
 				</header>
-				<div className="row" style={{marginTop: '20px'}}>
+				<div className="row">
 					<div className="col"></div>
-					<div className="col-md-8 container shadow-lg rounded">
-						<form onSubmit={this.handleSubmit}>
+					<div className="col-md-8">
+						<form onSubmit={this.handleSubmit} style={{marginTop: '20px'}}>
 							<label>Twitch Name:</label>
-							<input className="base-input" type="text" value={this.state.twitchName} onChange={this.handleChange} />
+							<input className="base-input" name="twitchName" type="text" value={this.state.twitchName} onChange={this.handleChange} />
 							<input type="submit" className="go-button" value="Go"/>
 							<label>Stream</label>
 							<input name="showStream" type="checkbox" checked={this.state.stream} onChange={this.handleInputChange} />
 						</form>
-						  {this.state.stream && this.state.botID != null &&<iframe
+					</div>
+					<div className="col"></div>
+				</div>
+				{this.state.working && <div style={{paddingTop: '100px', height: '64px', width:'100%'}}>
+  					<div style={{marginLeft:'auto', marginRight:'auto', width:'64px', height:'64px'}}>
+						  <ReactLoading type='bubbles' color='#6441a5'/>
+					  </div>
+				</div>}
+				{this.state.chartData != null && <div className="row" style={{marginTop: '10px'}}>
+					<div className="col"></div>
+					<div className="col-md-4 shadow-container" style={{marginRight:'20px'}}>
+						<Line style={{marginTop: '10px'}} data={this.state.chartData} width={480} height={270} ref="mpmChart"/>
+					</div>
+					{this.state.stream && <div className="col-md-4 shadow-container" style={{marginLeft:'20px', paddingLeft: '0px'}}>
+						<iframe
 							src={"https://player.twitch.tv/?channel=" + this.state.twitchName + "&muted=true"}
 							height="270"
 							width="480"
 							frameborder="0"
 							scrolling="no"
 							allowfullscreen="true">
-						</iframe> }
-						<div className="row">
-							<div className="col"></div>
-							<div className="col-md-6">
-								{this.state.chartData != null && <Line data={this.state.chartData} width={100} height={40} ref="mpmChart"/>}
-							</div>
-							<div className="col"></div>
-						</div>
+						</iframe>
+					</div>}
+					<div className="col"></div>
+				</div>}
+				{this.state.chartData != null && <div className="row" style={{marginTop: '20px'}}>
+					<div className="col"></div>
+					<div className="col-md-8 shadow">
+						Analytics
 					</div>
 					<div className="col"></div>
-				</div>
+				</div>}
 			</div>
 		);
 	}
