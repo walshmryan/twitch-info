@@ -167,13 +167,13 @@ class App extends Component {
 					</div>}
 					<div className="col"></div>
 				</div>}
-				{this.state.chartData != null && <div className="row" style={{marginTop: '20px'}}>
+				{/* {this.state.chartData != null && <div className="row" style={{marginTop: '20px'}}>
 					<div className="col"></div>
 					<div className="col-md-8 shadow">
 						Analytics
 					</div>
 					<div className="col"></div>
-				</div>}
+				</div>} */}
 			</div>
 		);
 	}
