@@ -7,9 +7,24 @@ module.exports = class BotController {
     }
 
     createNewBot(channels) {
+        var bot = this.checkChannels(channels);
+        if(bot != null){
+            return bot.getBotID();
+        }
+        console.log('creating new bot, no bots found for channel');
         let bot1 = new Bot(channels);
         this.bots.push(bot1);
         return bot1.getBotID();
+    }
+
+    checkChannels(channel) {
+        for(let i = 0; i < this.bots.length; i++) {
+            var bot = this.bots[i];
+            if(bot.channels[0] == ('#'+channel)) {
+                return bot;
+            }
+        }
+        return null;
     }
     
     getBotForID(botID) {

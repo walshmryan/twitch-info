@@ -20,7 +20,7 @@ app.get('/bot/status/:botID', function (req, res) {
     if(bot == null) {
         throw new Error('No bot found for ID');
     } else {
-        res.json({'test':bot.getAnalytics()});
+        res.json({'mpm':bot.getAnalytics()});
     }
 });
 

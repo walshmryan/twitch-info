@@ -10,7 +10,7 @@ module.exports = class Bot {
 
 		this.options = {
 			options: {
-				debug: true
+				debug: false
 			},
 			connection: {
 				cluster: "aws",
@@ -34,7 +34,7 @@ module.exports = class Bot {
 	getAnalytics() {
 		var minutes = this.stopwatch.time() / 60000;
 		var mpm = this.messageCount / minutes;
-		return mpm;
+		return Math.round(mpm);
 	}
 
 	connect() {
@@ -47,7 +47,7 @@ module.exports = class Bot {
 	}
 
 	messageHandler(target, context, msg, self) {
-		console.log(msg);
+		// console.log(msg);
 		this.messageCount++;
 	}
 
