@@ -1,5 +1,6 @@
 require('dotenv').config();
 var express = require('express');
+const path = require('path');
 var BotController = require('./bots/bot-controller.js');
 
 var app = express();
