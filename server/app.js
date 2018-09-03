@@ -5,6 +5,8 @@ var BotController = require('./bots/bot-controller.js');
 var app = express();
 var botController = new BotController();
 
+app.use(express.static(path.resolve(__dirname, '../client/build')));
+
 app.get('/', function (req, res) {
    res.send('Hello World');
 });
@@ -22,6 +24,10 @@ app.get('/bot/status/:botID', function (req, res) {
     } else {
         res.json({'mpm':bot.getAnalytics()});
     }
+});
+
+app.get('*', function(req, res) {
+    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
 });
 
 var server = app.listen(process.env.PORT || 8080, function () {
