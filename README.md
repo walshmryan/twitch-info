@@ -1,13 +1,10 @@
 # ![WebApp](resources/landing-page.png?raw=true)
 # TwitchInfo
-  A web app using Twitch's Bot API to calculate analytics about Twitch streams. It is built with a React front-end and a Node.js web server.
+  A web app using Twitch's IRC API to calculate analytics about Twitch streams. It is built with a React.js front-end and a Node.js web server.
 
 
 ## Demo
-Here is a working live demo :  https://twitch-info-rw.herokuapp.com/client
-
-
-## [Usage](https://iharsh234.github.io/WebApp/) 
+Here is a working live demo :  [demo](https://twitch-info-rw.herokuapp.com/client){:target="_blank"}
 
 ## Built with 
 
