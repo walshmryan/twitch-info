@@ -6,7 +6,7 @@ var BotController = require('./bots/bot-controller.js');
 var app = express();
 var botController = new BotController();
 
-app.use(express.static(path.resolve(__dirname, '../client/build')));
+app.use('/walshmryan/twitch-info/', express.static(path.resolve(__dirname, '../client/build')));
 
 app.get('/', function (req, res) {
    res.send('Hello World');
