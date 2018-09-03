@@ -28,7 +28,7 @@ app.get('/bot/status/:botID', function (req, res) {
 });
 
 app.get('*', function(req, res) {
-    res.sendFile(path.resolve(__dirname, '../client/build', 'index.html'));
+    res.sendFile(path.resolve('/walshmryan/twitch-info/', __dirname, '../client/build', 'index.html'));
 });
 
 var server = app.listen(process.env.PORT || 8080, function () {
