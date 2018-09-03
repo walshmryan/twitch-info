@@ -4,7 +4,7 @@
 
 
 ## Demo
-Here is a working live demo :  [demo](https://twitch-info-rw.herokuapp.com/client){:target="_blank"}
+Here is a working live demo :  [demo](https://twitch-info-rw.herokuapp.com/client)
 
 ## Built with 
 
