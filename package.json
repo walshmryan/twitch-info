@@ -5,7 +5,8 @@
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon app.js"
+    "start": "node ./server/app.js",
+    "heroku-postbuild": "cd ../client/ && npm install && npm install --only=dev --no-shrinkwrap && npm run build"
   },
   "author": "Ryan Walsh",
   "license": "ISC",
