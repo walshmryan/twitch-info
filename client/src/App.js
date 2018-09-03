@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import load from './load.png';
 import './App.css';
 import axios from 'axios';
 import { Line } from 'react-chartjs-2';
